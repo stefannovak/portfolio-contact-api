@@ -3,6 +3,7 @@ using Portfolio.Api;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
+namespace Portfolio.Api;
 
 public class EmailService : IEmailService
 {
@@ -25,11 +26,11 @@ public class EmailService : IEmailService
     {
         var message = new SendGridMessage
         {
-            From = new EmailAddress(_sendGridOptions.Value.FromAddress, "Stefan Novak"),
+            From = new EmailAddress(_sendGridOptions.Value.FromAddress, "Portfolio Contact Form"),
         };
-        message.AddTo(fromAddress);
-        message.Subject = subject;
-        message.PlainTextContent = plaintextMessageContent;
+        message.AddTo(_sendGridOptions.Value.DestinationAddress);
+        message.Subject = $"{subject} - {fromAddress}";
+        message.PlainTextContent = $"Message from {name}: {plaintextMessageContent}";
         await TrySendEmail(message);
     }
 
